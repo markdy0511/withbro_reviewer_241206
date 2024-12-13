@@ -19,7 +19,7 @@ from with_report_new.period_filter import filter_by_period
 from with_report_new.arrange_metric import arrange_metric
 
 
-insert_logo.add_logo("withbrother_logo.png")
+insert_logo.add_logo("C:\\Users\\markd\\AI\WithBrother-AI\\withbrother_logo.png")
 
 init_session_state.init_session_state()
 
@@ -420,12 +420,12 @@ if (st.session_state["previous_version"] >= 0):
                         #    st.write(statement)
 
                         try:
-                            description_cmp_detail = detail_writer.writer(top_cmp_num, sorted_cmp_df, sort_columns_cmp)
+                            description_cmp_detail = detail_writer.writer(top_cmp_num, sorted_cmp_df, sort_columns_cmp, "캠페인")
 
                             st.session_state.cmp_ranking_result['description_cmp_detail'] = description_cmp_detail
 
                             #st.write(description_cmp_detail)
-                            bullet_output.display_analysis(description_cmp_detail,sorted_cmp_df.columns.to_list())
+                            bullet_output.display_analysis(description_cmp_detail,sorted_cmp_df.columns.to_list(), "캠페인")
                         except:
                             st.session_state.cmp_ranking_result['description_cmp_detail'] = "1데이터 정합성을 확인해주세요."
                             st.write("2데이터 정합성을 확인해주세요.")
@@ -438,9 +438,9 @@ if (st.session_state["previous_version"] >= 0):
                             #for statement in st.session_state.cmp_ranking_result['cmp_detail_statment']:
                             #    st.write(statement)
                             st.write(st.session_state.cmp_ranking_result['description_cmp_detail'])
-                            bullet_output.display_analysis(st.session_state.cmp_ranking_result['description_cmp_detail'],st.session_state.cmp_ranking_result['top_cmp_detail_df'].columns.to_list())
+                            #ullet_output.display_analysis(st.session_state.cmp_ranking_result['description_cmp_detail'],st.session_state.cmp_ranking_result['top_cmp_detail_df'].columns.to_list(), "캠페인")
                             try:
-                                bullet_output.display_analysis(st.session_state.cmp_ranking_result['description_cmp_detail'],st.session_state.cmp_ranking_result['top_cmp_detail_df'].columns.to_list())
+                                bullet_output.display_analysis(st.session_state.cmp_ranking_result['description_cmp_detail'],st.session_state.cmp_ranking_result['top_cmp_detail_df'].columns.to_list(), "캠페인")
                             except:
                                 st.write("3데이터 정합성을 확인해주세요.")
                 else:
@@ -498,12 +498,12 @@ if (st.session_state["previous_version"] >= 0):
                         #    st.write(statement)
 
                         try:
-                            description_grp_detail = detail_writer.writer(top_grp_num, sorted_grp_df, st.session_state.cmp_ranking_result["selected_metrics"])
+                            description_grp_detail = detail_writer.writer(top_grp_num, sorted_grp_df, st.session_state.cmp_ranking_result["selected_metrics"], "광고그룹")
 
                             st.session_state.grp_ranking_result['description_grp_detail'] = description_grp_detail
 
                             #st.write(description_grp_detail)
-                            bullet_output.display_analysis(description_grp_detail, sorted_grp_df.columns.to_list())
+                            bullet_output.display_analysis(description_grp_detail, sorted_grp_df.columns.to_list(), "광고그룹")
                         except:
                             st.write("데이터 정합성을 확인해주세요.")
                 else:
@@ -644,19 +644,20 @@ if (st.session_state["previous_version"] >= 0):
             da_filtered_ga_type_df = st.session_state.df_set['used_ga'][st.session_state.df_set['used_ga']["광고유형"] == da_selected_ad_type]
 
             st.write("분석하고자 하는 매체를 선택해주세요.")
-            selected_channel = st.selectbox(
+            da_selected_channel = st.selectbox(
                 "매체 선택",
                 da_filtered_type_df["매체"].dropna().unique()
             )
-            st.session_state.DA_result["channel"] = selected_channel
-            st.session_state.da_cmp_ranking_result["channel"] = selected_channel
+            da_brnch_list = list(da_filtered_type_df["소재구분"][da_filtered_type_df["매체"] == da_selected_channel].dropna().unique())
+            st.session_state.DA_result["channel"] = da_selected_channel
+            st.session_state.da_cmp_ranking_result["channel"] = da_selected_channel
             overview_da, cmp_da, grp_da, brnch_da, brnch_dtl_da, kwrd_da  = st.tabs(["전체 성과 분석","캠페인 분석","그룹 분석", "소재구분 분석", "소재종류 분석", "성과 상위 소재 분석"])
             with overview_da:
-                st.subheader(selected_channel)
-                st.write(st.session_state.ch_ranking_result["ch_overview_df_dic"][selected_channel])
+                st.subheader(da_selected_channel)
+                st.write(st.session_state.ch_ranking_result["ch_overview_df_dic"][da_selected_channel])
                 with st.expander("전체 지표 별 변화 문구"):
-                    bullet_output.print_dic_bullet(st.session_state.ch_ranking_result["ch_overview_st_dic"][selected_channel])
-                summary_text_3 = st.session_state.ch_ranking_result['ch_overview_st_dic_summary'][selected_channel]['총평'].split('. ')
+                    bullet_output.print_dic_bullet(st.session_state.ch_ranking_result["ch_overview_st_dic"][da_selected_channel])
+                summary_text_3 = st.session_state.ch_ranking_result['ch_overview_st_dic_summary'][da_selected_channel]['총평'].split('. ')
                 st.write(f"**총평**:")
                 for s in summary_text_3:
                     st.write("- ", s)
@@ -677,8 +678,8 @@ if (st.session_state["previous_version"] >= 0):
                 st.session_state.da_cmp_ranking_result["metric_sort_order"] = sort_orders_da_cmp
                 st.session_state.da_cmp_ranking_result["selected_metrics"] = sort_columns_da_cmp
 
-                da_filtered_cmp_df = da_filtered_type_df[da_filtered_type_df["매체"] == selected_channel]
-                da_filtered_ga_cmp_df = da_filtered_ga_type_df[da_filtered_ga_type_df["매체"] == selected_channel]
+                da_filtered_cmp_df = da_filtered_type_df[da_filtered_type_df["매체"] == da_selected_channel]
+                da_filtered_ga_cmp_df = da_filtered_ga_type_df[da_filtered_ga_type_df["매체"] == da_selected_channel]
 
                 st.session_state.da_cmp_ranking_result["cmp_df"] = da_filtered_cmp_df
                 st.session_state.da_cmp_ranking_result["ga_cmp_df"] = da_filtered_ga_cmp_df
@@ -722,12 +723,12 @@ if (st.session_state["previous_version"] >= 0):
                         #    st.write(statement)
 
                         try:
-                            da_description_cmp_detail = detail_writer.writer(da_top_cmp_num, da_sorted_cmp_df, sort_columns_da_cmp)
+                            da_description_cmp_detail = detail_writer.writer(da_top_cmp_num, da_sorted_cmp_df, sort_columns_da_cmp, "캠페인")
 
                             st.session_state.da_cmp_ranking_result['description_cmp_detail'] = da_description_cmp_detail
 
                             #st.write(description_cmp_detail)
-                            bullet_output.display_analysis(da_description_cmp_detail,da_sorted_cmp_df.columns.to_list())
+                            bullet_output.display_analysis(da_description_cmp_detail,da_sorted_cmp_df.columns.to_list(), "캠페인")
                         except:
                             st.session_state.da_cmp_ranking_result['description_cmp_detail'] = "1데이터 정합성을 확인해주세요."
                             st.write("2데이터 정합성을 확인해주세요.")
@@ -741,7 +742,7 @@ if (st.session_state["previous_version"] >= 0):
                             #    st.write(statement)
                             #st.write(st.session_state.cmp_ranking_result['description_cmp_detail'])
                             try:
-                                bullet_output.display_analysis(st.session_state.da_cmp_ranking_result['description_cmp_detail'],st.session_state.da_cmp_ranking_result['top_cmp_detail_df'].columns.to_list())
+                                bullet_output.display_analysis(st.session_state.da_cmp_ranking_result['description_cmp_detail'],st.session_state.da_cmp_ranking_result['top_cmp_detail_df'].columns.to_list(), "캠페인")
                             except:
                                 st.write("3데이터 정합성을 확인해주세요.")
             with grp_da:
@@ -755,7 +756,7 @@ if (st.session_state["previous_version"] >= 0):
                         st.session_state.da_cmp_ranking_result["cmp_df"]["캠페인"].dropna().unique(),
                     )
 
-                    st.session_state.da_grp_ranking_result = {"campaign" : selected_campaign}
+                    st.session_state.da_grp_ranking_result = {"campaign" : da_selected_campaign}
 
                     da_filtered_grp_df = st.session_state.df_set["used_media"][(st.session_state.df_set["used_media"]["매체"] == st.session_state.da_cmp_ranking_result["channel"]) & (st.session_state.df_set["used_media"]["캠페인"] == da_selected_campaign)]
                     da_filtered_ga_grp_df = st.session_state.df_set["used_ga"][(st.session_state.df_set["used_ga"]["매체"] == st.session_state.da_cmp_ranking_result["channel"]) & (st.session_state.df_set["used_ga"]["캠페인"] == da_selected_campaign)]
@@ -764,8 +765,8 @@ if (st.session_state["previous_version"] >= 0):
                     st.session_state.da_grp_ranking_result["ga_grp_df"] = da_filtered_ga_grp_df
 
                     da_detail_grp_df, da_metric_filtered_detail_grp_df, da_dtl_grp_all_col_list = ch_ranking_writer.ch_ranking_df(
-                        filtered_grp_df,
-                        filtered_ga_grp_df,
+                        da_filtered_grp_df,
+                        da_filtered_ga_grp_df,
                         '광고그룹',
                         st.session_state.metric_set,
                         st.session_state.cal_trans_metric_set,
@@ -797,12 +798,12 @@ if (st.session_state["previous_version"] >= 0):
                         #    st.write(statement)
 
                         try:
-                            da_description_grp_detail = detail_writer.writer(da_top_grp_num, da_sorted_grp_df, st.session_state.da_cmp_ranking_result["selected_metrics"])
+                            da_description_grp_detail = detail_writer.writer(da_top_grp_num, da_sorted_grp_df, st.session_state.da_cmp_ranking_result["selected_metrics"],"광고그룹")
 
                             st.session_state.da_grp_ranking_result['description_grp_detail'] = da_description_grp_detail
 
                             #st.write(description_grp_detail)
-                            bullet_output.display_analysis(da_description_grp_detail, sorted_grp_df.columns.to_list())
+                            bullet_output.display_analysis(da_description_grp_detail, sorted_grp_df.columns.to_list(),"광고그룹")
                         except:
                             st.write("데이터 정합성을 확인해주세요.")
                 else:
@@ -812,7 +813,7 @@ if (st.session_state["previous_version"] >= 0):
                     for brnch in st.session_state.brnch_ranking_result["sort_order"]:
                         if str(brnch) == '정보없음':
                             continue
-                        elif brnch in filtered_type_df["소재구분"].dropna().unique():
+                        elif (brnch in da_filtered_type_df["소재구분"].dropna().unique()) and (brnch in da_brnch_list):
                             st.subheader(brnch)
                             st.write(st.session_state.brnch_ranking_result["brnch_overview_df_dic"][brnch])
                             with st.expander("전체 지표 별 변화 문구"):
@@ -888,12 +889,12 @@ if (st.session_state["previous_version"] >= 0):
                             #    st.write(statement)
 
                             try:
-                                description_brnch_detail = detail_writer.writer(top_num, sorted_df, sort_columns_br)
+                                description_brnch_detail = detail_writer.writer(top_num, sorted_df, sort_columns_br, "소재")
 
                                 st.session_state.brnch_detail_result['description_brnch_detail'] = description_brnch_detail
 
                                 #st.write(description_brnch_detail)
-                                bullet_output.display_analysis(description_brnch_detail,sorted_df.columns.to_list())
+                                bullet_output.display_analysis(description_brnch_detail,sorted_df.columns.to_list(), "소재")
                             except:
                                 st.session_state.brnch_detail_result['description_brnch_detail'] = "1데이터 정합성을 확인해주세요."
                                 st.write("2데이터 정합성을 확인해주세요.")
@@ -908,7 +909,7 @@ if (st.session_state["previous_version"] >= 0):
                                 #    st.write(statement)
                                 #st.write(st.session_state.brnch_detail_result['description_brnch_detail'])
                                 try:
-                                    bullet_output.display_analysis(st.session_state.brnch_detail_result['description_brnch_detail'],st.session_state.brnch_detail_result['top_brnch_detail_df'].columns.to_list())
+                                    bullet_output.display_analysis(st.session_state.brnch_detail_result['description_brnch_detail'],st.session_state.brnch_detail_result['top_brnch_detail_df'].columns.to_list(), "소재")
                                 except:
                                     st.write("3데이터 정합성을 확인해주세요.")              
             with kwrd_da:
@@ -926,7 +927,7 @@ if (st.session_state["previous_version"] >= 0):
                 
                 #캠페인 선택 필터
                 if da_kwrd_selected_channel != "선택안함":
-                    da_kwrd_filtered_cmp_df = da_filtered_type_df[da_filtered_type_df["매체"] == kwrd_selected_channel]
+                    da_kwrd_filtered_cmp_df = da_filtered_type_df[da_filtered_type_df["매체"] == da_kwrd_selected_channel]
                     da_kwrd_selected_cmp = st.selectbox(
                             "- **캠페인 선택**",
                             ["선택안함"] + list(da_kwrd_filtered_cmp_df["캠페인"].dropna().unique()),
