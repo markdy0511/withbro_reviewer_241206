@@ -19,7 +19,7 @@ from with_report_new.period_filter import filter_by_period
 from with_report_new.arrange_metric import arrange_metric
 
 
-insert_logo.add_logo("C:\\Users\\markd\\AI\WithBrother-AI\\withbrother_logo.png")
+insert_logo.add_logo("withbrother_logo.png")
 
 init_session_state.init_session_state()
 
