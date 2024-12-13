@@ -693,8 +693,8 @@ if (st.session_state["previous_version"] >= 0):
                     if (st.session_state["da_cmp_previous_version"] != st.session_state["da_cmp_current_version"]):
 
                         da_detail_cmp_df, da_metric_filtered_detail_cmp_df, da_dtl_cmp_all_col_list = ch_ranking_writer.ch_ranking_df(
-                            filtered_cmp_df,
-                            filtered_ga_cmp_df,
+                            da_filtered_cmp_df,
+                            da_filtered_ga_cmp_df,
                             '캠페인',
                             st.session_state.metric_set,
                             st.session_state.cal_trans_metric_set,
