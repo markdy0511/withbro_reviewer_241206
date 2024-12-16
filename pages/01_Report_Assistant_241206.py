@@ -809,6 +809,7 @@ if (st.session_state["previous_version"] >= 0):
                 else:
                     st.write("캠페인 분석 탭을 먼저 실행해주세요.")
             with brnch_da:
+                a_brnch_dtl_list = []
                 if st.session_state["brnch_dsply"] != 0:
                     for brnch in st.session_state.brnch_ranking_result["sort_order"]:
                         if str(brnch) == '정보없음':
@@ -823,6 +824,7 @@ if (st.session_state["previous_version"] >= 0):
                             for s in summary_text_4:
                                 st.write("- ", s)
                             #bullet_output.print_dic_bullet(st.session_state.brnch_ranking_result["brnch_overview_st_dic_summary"][brnch])
+                            da_brnch_dtl_list.append(brnch)
                         else:
                             continue
                 else:
@@ -835,7 +837,7 @@ if (st.session_state["previous_version"] >= 0):
                     st.write("분석하고자 하는 소재 구분을 선택해주세요.")
                     selected_br = st.radio(
                         "소재구분 선택",
-                        filtered_type_df["소재구분"].dropna().unique()
+                        da_brnch_dtl_list
                     )
                 
                     sort_orders_br = org_sort_orders
