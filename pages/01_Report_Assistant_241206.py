@@ -809,7 +809,7 @@ if (st.session_state["previous_version"] >= 0):
                 else:
                     st.write("캠페인 분석 탭을 먼저 실행해주세요.")
             with brnch_da:
-                a_brnch_dtl_list = []
+                da_brnch_dtl_list = []
                 if st.session_state["brnch_dsply"] != 0:
                     for brnch in st.session_state.brnch_ranking_result["sort_order"]:
                         if str(brnch) == '정보없음':
