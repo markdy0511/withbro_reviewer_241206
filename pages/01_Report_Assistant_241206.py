@@ -859,8 +859,8 @@ if (st.session_state["previous_version"] >= 0):
                     if (st.session_state["br_previous_version"] >= 0):
                         if (st.session_state["br_previous_version"] != st.session_state["br_current_version"]):
 
-                            filtered_br_df = filtered_type_df[filtered_type_df["소재구분"] == selected_br]
-                            filtered_ga_br_df = filtered_ga_type_df[filtered_ga_type_df["소재구분"] == selected_br]
+                            filtered_br_df = da_filtered_type_df[da_filtered_type_df["소재구분"] == selected_br]
+                            filtered_ga_br_df = da_filtered_ga_type_df[da_filtered_ga_type_df["소재구분"] == selected_br]
 
                             detail_df, metric_filtered_detail_df, dtl_all_col_list = ch_ranking_writer.ch_ranking_df(
                                 filtered_br_df,
